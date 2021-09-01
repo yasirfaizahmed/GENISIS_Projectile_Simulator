@@ -3,11 +3,8 @@ import math
 import turtle
 import time
 
-window = turtle.Screen()
-window.title("projectile simulator")
-window.bgcolor("black")
-window.setup(width=600, height=500)
-window.tracer(0)
+
+
 
 ROUND = 3
 DELTA_TIME = 0.05
@@ -46,8 +43,29 @@ def float_range(start, end, step):
 	while start < end:
 		yield round(start+step, ROUND)
 		start += step
-		
-def launch(t, ball, pen):
+	
+def take_inputs():
+	velocity = input()
+	angle = input()
+	return list([int(velocity), int(angle)])
+	
+def draw_ground(window):
+	gr = turtle.Turtle()
+	gr.speed(0)
+	gr.hideturtle()
+	gr.penup()
+	gr.goto(-300, 0)
+	gr.fillcolor("white")
+	gr.begin_fill()
+	for _ in range(2):
+		gr.forward(600)
+		gr.right(90)
+		gr.forward(5)
+		gr.right(90)
+	gr.end_fill()
+	window.update()		
+
+def launch(t, ball, pen, window):
 	pen.penup()
 	pen.goto(-150,0)
 	for _t in t:
@@ -59,11 +77,12 @@ def launch(t, ball, pen):
 		pen.end_fill()
 		pen.goto(ball.get_xcor(_t)*10-150, ball.get_ycor(_t)*10)
 		window.update()
-		#time.sleep(DELTA_TIME)
 		
 
+
 def main():
-	ball = Projectile_Object(20, 45)
+	inputs = take_inputs()
+	ball = Projectile_Object(inputs[0], inputs[1])
 	
 	time_list = list(float_range(0, END, DELTA_TIME))
 	
@@ -71,7 +90,17 @@ def main():
 	pen.speed(0)
 	pen.hideturtle()
 	
-	launch(time_list, ball, pen)
+	window = turtle.Screen()
+	window.title("projectile simulator")
+	window.bgcolor("black")
+	window.setup(width=600, height=500)
+	window.tracer(0)
+	
+	draw_ground(window)
+	
+	#turtle.onscreenclick(btnclick, 1)
+	
+	
 	# pen.goto(0, 0)
 	# pen.clear()
 	# pen.fillcolor("black")
