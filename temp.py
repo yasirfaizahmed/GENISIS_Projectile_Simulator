@@ -37,6 +37,8 @@ class Projectile_Object:
         self.xcor = xcor
         self.ycor = ycor
         self.planet = planet
+        if self.planet != 9:
+            self.color = colors[planet]
         if planet == 1:
             self.g = 3.61
         elif planet == 2:
@@ -53,7 +55,7 @@ class Projectile_Object:
             self.g = 10.5
         elif planet == 8:
             self.g = 13.3
-        self.color = colors[planet]
+        
     def get_xcor(self, t):
         self.xcor = round(self.velocity_0*math.cos(self.angle)*t, ROUND)
         return self.xcor
@@ -139,6 +141,7 @@ def launch(t, ball, pen, window):
         i += 1
         trail.penup()
         window.update()
+        
     #max range 
     trail.penup()
     trail.goto(ball.get_xcor(_t)*SCALE-690, ball.get_ycor(_t)*SCALE-240)
@@ -146,10 +149,15 @@ def launch(t, ball, pen, window):
     trail.penup()
     window.update()
     #printing some data
-    print("\n\t\tMaximum height         :", ball.max_height())
+    print("\n\t\tPlanet No.               :", ball.planet)
+    print("\t\tg Value of the Planet    :", ball.g)
+    print("\t\tMaximum height           :", ball.max_height())
     print("\t\tMaximum horizontal range :", ball.range())
     print("\t\tX componte in velocity   :", ball.get_xvel())
     #print("\t\tY componte in velocity   :", ball.get_yvel())
+def launch_all(t, balls, pen, window):
+    return 1
+    
 def draw_launch(window):
     ln = turtle.Turtle()
     ln.hideturtle()
@@ -160,27 +168,37 @@ def draw_launch(window):
     window.update()
 def main():
     inputs = take_inputs()
-    ball = Projectile_Object(inputs[0], inputs[1], planet=inputs[2])
-    #
-    END = ball.get_flighttime()
-    time_list = list(float_range(0, END, DELTA_TIME))
-    #
+    if inputs[2] == 9:
+        balls = []
+        for i in range(0, 9, 1):
+            balls.append(Projectile_Object(inputs[0], inputs[1], planet=inputs[2]))
+            balls[i].planet = i
+        END = balls[0].get_flighttime()
+        time_list = list(float_range(0, END, DELTA_TIME))
+    else:
+        ball = Projectile_Object(inputs[0], inputs[1], planet=inputs[2])
+        END = ball.get_flighttime()
+        time_list = list(float_range(0, END, DELTA_TIME))
+    #setting up the pen turtle
     pen = turtle.Turtle()
     pen.speed(0)
     pen.hideturtle()
-    #
+    #setting up the window
     window = turtle.Screen()
     window.title("projectile simulator")
     window.bgcolor("black")
     window.setup(width=1400, height=800)
     window.tracer(0)
-    #
+    #launch text and the ground
     draw_launch(window)
     draw_ground(window)
-    #
+    #listen to keyboard press
     window.listen()
-    window.onkeyrelease(lambda:launch(time_list, ball, pen, window), "space")
-    #
+    if inputs[2] != 9:
+        window.onkeyrelease(lambda:launch(time_list, ball, pen, window), "space")
+    else:
+        window.onkeyrelease(lambda:launch_all(time_list, balls, pen, window), "space")
+    #main gui loop
     window.mainloop()
 if __name__ == "__main__":
     main()

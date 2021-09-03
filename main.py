@@ -23,37 +23,33 @@ colors = {
         7: "green",
         8: "#6C1592"
     }
+gs = {
+    1: 3.61,
+    2: 8.83,
+    3: 9.8,
+    4: 3.75,
+    5: 26.0,
+    6: 11.2,
+    7: 10.5,
+    8: 13.3
+    }
 class Projectile_Object:
     velocity_0 = 0
     xcor = 0
     ycor = 0
     angle = 0
-    g = 9.8
+    g = 0
     color = "red"
-    planet = 3
-    def __init__(self, velocity_0, angle, xcor=0, ycor=0, planet=3):
+    planet = 0
+    def __init__(self, velocity_0, angle, planet):
         self.velocity_0 = velocity_0
         self.angle = math.radians(angle)
-        self.xcor = xcor
-        self.ycor = ycor
-        self.planet = planet
-        if planet == 1:
-            self.g = 3.61
-        elif planet == 2:
-            self.g = 8.83
-        elif planet == 3:
-            self.g = 9.8
-        elif planet == 4:
-            self.g = 3.75
-        elif planet == 5:
-            self.g = 26.0
-        elif planet == 6:
-            self.g = 11.2
-        elif planet == 7:
-            self.g = 10.5
-        elif planet == 8:
-            self.g = 13.3
-        self.color = colors[planet]
+        self.planet = planet+1
+        self.g = gs[self.planet]
+        if self.planet != 9:
+            self.color = colors[self.planet]
+        
+        
     def get_xcor(self, t):
         self.xcor = round(self.velocity_0*math.cos(self.angle)*t, ROUND)
         return self.xcor
@@ -147,14 +143,29 @@ def launch(t, ball, pen, window):
     trail.penup()
     window.update()
     #printing some data
-    print("\n\t\tPlanet No.             :", ball.planet)
+    print("\n\t\tPlanet No.               :", ball.planet)
     print("\t\tg Value of the Planet    :", ball.g)
     print("\t\tMaximum height           :", ball.max_height())
     print("\t\tMaximum horizontal range :", ball.range())
     print("\t\tX componte in velocity   :", ball.get_xvel())
     #print("\t\tY componte in velocity   :", ball.get_yvel())
-def launch_all(t, ball, pen, window):
-    return 1
+def launch_all(t, balls, pen, window):
+    pen.goto(-700, -250)
+    pen.penup()
+    for _t in t:
+        time.sleep(DELTA_TIME)
+        pen.clear()
+        for j in range(0, 8, 1):
+            pen.penup()
+            pen.fillcolor(balls[j].color)
+            pen.begin_fill()
+            pen.circle(RADIUS)
+            pen.end_fill()
+            pen.goto(balls[j].get_xcor(_t)*SCALE-680, balls[j].get_ycor(_t)*SCALE-250)
+        window.update()
+    
+    
+    
 def draw_launch(window):
     ln = turtle.Turtle()
     ln.hideturtle()
@@ -166,9 +177,11 @@ def draw_launch(window):
 def main():
     inputs = take_inputs()
     if inputs[2] == 9:
-        balls[8] = Projectile_Object
-        for i in range(1, 9, 1):
-            ball.planet = i 
+        balls = []
+        for i in range(0, 8, 1):
+            balls.append(Projectile_Object(inputs[0], inputs[1], planet=i))
+        END = balls[2].get_flighttime()
+        time_list = list(float_range(0, END, DELTA_TIME))
     else:
         ball = Projectile_Object(inputs[0], inputs[1], planet=inputs[2])
         END = ball.get_flighttime()
@@ -191,7 +204,7 @@ def main():
     if inputs[2] != 9:
         window.onkeyrelease(lambda:launch(time_list, ball, pen, window), "space")
     else:
-        window.onkeyrelease(lambda:launch_all(time_list, ball, pen, window), "space")
+        window.onkeyrelease(lambda:launch_all(time_list, balls, pen, window), "space")
     #main gui loop
     window.mainloop()
 if __name__ == "__main__":
