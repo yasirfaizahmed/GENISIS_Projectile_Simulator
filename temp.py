@@ -2,58 +2,86 @@ import decimal
 import math
 import turtle
 import time
-
-
-
-
+#
 ROUND = 3
 RADIUS = 5
-DELTA_TIME = 0.03
+DELTA_TIME = 0.02
 END = 4
 SCALE = 10
-g = 9.8
+
 G = 6969
 FONT_SIZE = 17
 FONT = ('Arial', FONT_SIZE, 'bold')
-
+#
+colors = {
+        1: "white",
+        2: "yellow",
+        3: "orange",
+        4: "pink",
+        5: "red",
+        6: "light green",
+        7: "green",
+        8: "#6C1592"
+    }
 class Projectile_Object:
     velocity_0 = 0
     xcor = 0
     ycor = 0
     angle = 0
-    def __init__(self, velocity_0, angle, xcor=0, ycor=0):
+    g = 9.8
+    color = "red"
+    def __init__(self, velocity_0, angle, xcor=0, ycor=0, planet=3):
         self.velocity_0 = velocity_0
         self.angle = math.radians(angle)
         self.xcor = xcor
         self.ycor = ycor
+        if planet == 1:
+            self.g = 3.61
+        elif planet == 2:
+            self.g = 8.83
+        elif planet == 3:
+            self.g = 9.8
+        elif planet == 4:
+            self.g = 3.75
+        elif planet == 5:
+            self.g = 26.0
+        elif planet == 6:
+            self.g = 11.2
+        elif planet == 7:
+            self.g = 10.5
+        elif planet == 8:
+            self.g = 13.3
+        self.color = colors[planet]
     def get_xcor(self, t):
         self.xcor = round(self.velocity_0*math.cos(self.angle)*t, ROUND)
         return self.xcor
     def get_ycor(self, t):
-        self.ycor = round( (self.velocity_0*math.sin(self.angle)*t)-0.5*g*(t**2) , ROUND)
+        self.ycor = round( (self.velocity_0*math.sin(self.angle)*t)-0.5*self.g*(t**2) , ROUND)
         return self.ycor
     def get_xvel(self):
         return round( (self.velocity_0*math.cos(self.angle)) , ROUND)
     def get_yvel(self, t):
-        return round( (self.velocity_0*math.sin(self.angle)-g*t) , ROUND)
+        return round( (self.velocity_0*math.sin(self.angle)-self.g*t) , ROUND)
     def get_flighttime(self):
-        return round( (2*self.velocity_0*math.sin(self.angle)/g) , ROUND)
+        return round( (2*self.velocity_0*math.sin(self.angle)/self.g) , ROUND)
     def max_height(self):
-        return round( (((self.velocity_0*math.sin(self.angle))**2)/(2*g)) , ROUND)
+        return round( (((self.velocity_0*math.sin(self.angle))**2)/(2*self.g)) , ROUND)
     def range(self):
-        return round( (self.velocity_0**2)*math.sin(2*self.angle)/g , ROUND)
+        return round( (self.velocity_0**2)*math.sin(2*self.angle)/self.g , ROUND)
 def float_range(start, end, step):
     while start < end:
         yield round(start+step, ROUND)
         start += step
 def take_inputs():
     try:
-        velocity = int(input("\t\tEnter velocity in m/s:"))
+        velocity = int(input("\t\tEnter velocity in m/s        :"))
         angle = int(input("\t\tEnter angle of launch in degrees:"))
+        planet = int(input("\n\t\tWhich planet are you in?, enter the number\n\tMercury-->1\n\tVenus-->2\n\tEarth-->3\n\tMars-->4\n\tJupyter-->5\n\tSaturn-->6\n\tUranus-->7\n\tNeptune-->8\n\n\tAll at once-->9\n\t\t"))
+        
     except:
         print("\tOnly integral values are allowed!")
         return take_inputs()
-    return list([velocity, angle])
+    return list([velocity, angle, planet])
 def draw_ground(window):
     gr = turtle.Turtle()
     gr.speed(0)
@@ -88,8 +116,8 @@ def launch(t, ball, pen, window):
     for _t in t:
         time.sleep(DELTA_TIME)
         pen.clear()
-        trail.fillcolor("red")
-        pen.fillcolor("red")
+        trail.fillcolor(ball.color)
+        pen.fillcolor(ball.color)
         pen.begin_fill()
         trail.begin_fill()
         pen.circle(RADIUS)
@@ -121,7 +149,7 @@ def launch(t, ball, pen, window):
     trail.penup()
     window.update()
     #
-    print("\t\t\nMaximum height           :", ball.max_height())
+    print("\n\t\tMaximum height         :", ball.max_height())
     print("\t\tMaximum horizontal range :", ball.range())
     print("\t\tX componte in velocity   :", ball.get_xvel())
     #print("\t\tY componte in velocity   :", ball.get_yvel())
@@ -135,7 +163,7 @@ def draw_launch(window):
     window.update()
 def main():
     inputs = take_inputs()
-    ball = Projectile_Object(inputs[0], inputs[1])
+    ball = Projectile_Object(inputs[0], inputs[1], planet=inputs[2])
     #
     END = ball.get_flighttime()
     time_list = list(float_range(0, END, DELTA_TIME))
@@ -159,4 +187,4 @@ def main():
     window.mainloop()
 if __name__ == "__main__":
     main()
-
+    
