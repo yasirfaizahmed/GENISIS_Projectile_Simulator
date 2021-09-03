@@ -30,11 +30,13 @@ class Projectile_Object:
     angle = 0
     g = 9.8
     color = "red"
+    planet = 3
     def __init__(self, velocity_0, angle, xcor=0, ycor=0, planet=3):
         self.velocity_0 = velocity_0
         self.angle = math.radians(angle)
         self.xcor = xcor
         self.ycor = ycor
+        self.planet = planet
         if planet == 1:
             self.g = 3.61
         elif planet == 2:
@@ -101,15 +103,13 @@ def launch(t, ball, pen, window):
     trail = turtle.Turtle()
     trail.hideturtle()
     trail.speed(0)
-    #
+    #drawing the angle line
     trail.goto(-685,-250)
     trail.color("white")
     trail.left(math.degrees(ball.angle))
     trail.forward(350)
     trail.penup()
-    #
-    maxheight = ball.max_height()
-    trail.color("red")
+    #going to the default positions
     trail.goto(-680,-250)
     pen.goto(-700, -250)
     i = 0
@@ -124,13 +124,10 @@ def launch(t, ball, pen, window):
         trail.circle(1)
         pen.end_fill()
         trail.end_fill()
-        # pen.penup()
-        # pen.color("white")
-        # pen.goto(ball.get_xcor(_t)*SCALE-680, ball.get_ycor(_t)*SCALE-250)
-        # pen.write((str(ball.get_yvel(_t))), align="center", font=('Arial', 6, 'bold'))
+        #drawing the ball and trail at once
         pen.goto(ball.get_xcor(_t)*SCALE-680, ball.get_ycor(_t)*SCALE-250)
         trail.goto(ball.get_xcor(_t)*SCALE-680, ball.get_ycor(_t)*SCALE-250+RADIUS)
-        #
+        #max height
         if i == int(len(t)/2):
             trail.penup()
             trail.color("white")
@@ -142,13 +139,13 @@ def launch(t, ball, pen, window):
         i += 1
         trail.penup()
         window.update()
-    #
+    #max range 
     trail.penup()
     trail.goto(ball.get_xcor(_t)*SCALE-690, ball.get_ycor(_t)*SCALE-240)
     trail.write(str(ball.range()), align="center", font=('Arial', 13, 'bold'))
     trail.penup()
     window.update()
-    #
+    #printing some data
     print("\n\t\tMaximum height         :", ball.max_height())
     print("\t\tMaximum horizontal range :", ball.range())
     print("\t\tX componte in velocity   :", ball.get_xvel())
