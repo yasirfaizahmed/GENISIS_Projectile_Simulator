@@ -6,7 +6,7 @@ import time
 ROUND = 3
 RADIUS = 5
 DELTA_TIME = 0.02
-END_TIME = 4
+END = 4
 SCALE = 10
 
 G = 6969
@@ -55,12 +55,17 @@ class Projectile_Object:
     def __init__(self, velocity_0, angle, planet, FLAG = False):
         self.velocity_0 = velocity_0
         self.angle = math.radians(angle)
-        if FLAG is True:
+        if FLAG == True:
             self.planet = planet+1
-        elif FLAG is False:
+            self.color = colors[self.planet]
+            self.g = gs[self.planet]
+        elif FLAG == False:
             self.planet = planet
-        self.color = colors[self.planet]
-        self.g = gs[self.planet]
+            self.color = colors[self.planet]
+            self.g = gs[self.planet]
+        
+        
+        
     def get_xcor(self, t):
         self.xcor = round(self.velocity_0*math.cos(self.angle)*t, ROUND)
         return self.xcor
@@ -85,10 +90,8 @@ def take_inputs():
     try:
         velocity = int(input("\t\tEnter velocity in m/s        :"))
         angle = int(input("\t\tEnter angle of launch in degrees:"))
-        print("\n\t\tWhich planet are you in?, enter the number")
-        print("\tMercury-->1\n\tVenus-->2\n\tEarth-->3\n\tMars-->4")
-        print("\tJupyter-->5\n\tSaturn-->6\n\tUranus-->7\n\tNeptune-->8\n\n\tAll at once-->9\n\t\t")
-        planet = input()
+        planet = int(input("\n\t\tWhich planet are you in?, enter the number\n\tMercury-->1\n\tVenus-->2\n\tEarth-->3\n\tMars-->4\n\tJupyter-->5\n\tSaturn-->6\n\tUranus-->7\n\tNeptune-->8\n\n\tAll at once-->9\n\t\t"))
+        
     except:
         print("\tOnly integral values are allowed!")
         return take_inputs()
@@ -107,7 +110,7 @@ def draw_ground(window):
         gr.forward(500)
         gr.right(90)
     gr.end_fill()
-    window.update()
+    window.update()        
 def launch(t, ball, pen, window):
     trail = turtle.Turtle()
     trail.hideturtle()
@@ -153,7 +156,8 @@ def launch(t, ball, pen, window):
         i += 1
         trail.penup()
         window.update()
-    #max range
+        
+    #max range 
     trail.penup()
     trail.goto(ball.get_xcor(_t)*SCALE-690, ball.get_ycor(_t)*SCALE-240)
     trail.write(str(ball.range()), align="center", font=('Arial', 13, 'bold'))
@@ -194,12 +198,12 @@ def main():
         balls = []
         for i in range(0, 8, 1):
             balls.append(Projectile_Object(inputs[0], inputs[1], planet=i, FLAG=True))
-        END_TIME = balls[0].get_flighttime()
-        time_list = list(float_range(0, END_TIME, DELTA_TIME))
+        END = balls[0].get_flighttime()
+        time_list = list(float_range(0, END, DELTA_TIME))
     else:
         ball = Projectile_Object(inputs[0], inputs[1], planet=inputs[2], FLAG=False)
-        END_TIME = ball.get_flighttime()
-        time_list = list(float_range(0, END_TIME, DELTA_TIME))
+        END = ball.get_flighttime()
+        time_list = list(float_range(0, END, DELTA_TIME))
     #setting up the pen turtle
     pen = turtle.Turtle()
     pen.speed(0)
@@ -223,3 +227,4 @@ def main():
     window.mainloop()
 if __name__ == "__main__":
     main()
+    
