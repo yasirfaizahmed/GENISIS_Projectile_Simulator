@@ -180,6 +180,32 @@ def launch_all(t, balls, pen, window):
     trail.forward(350)
     trail.penup()
     
+    
+    pos = 250
+    for index in range(1, 9, 1):
+        trail.goto(200, pos)
+        #trail.color(balls[index].color)
+        if index == 1:
+            trail.color("yellow")
+        elif index == 2:
+            trail.color("orange")
+        elif index == 3:
+            trail.color("pink")
+        elif index == 4:
+            trail.color("red")
+        elif index == 5:
+            trail.color("light green")
+        elif index == 6:
+            trail.color("green")
+        elif index == 7:
+            trail.color("#6C1592")
+        elif index == 8:
+            trail.color("white")
+        trail.write(str(planets[index]), font=('Arial', 10, 'bold'))
+        pos -= 20
+        trail.penup()
+        
+    
     pen.goto(-700, -250)
     pen.penup()
     for _t in t:
