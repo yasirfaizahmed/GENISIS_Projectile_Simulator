@@ -171,6 +171,15 @@ def launch(t, ball, pen, window):
     print("\t\tX componte in velocity   :", ball.get_xvel())
     #print("\t\tY componte in velocity   :", ball.get_yvel())
 def launch_all(t, balls, pen, window):
+    trail = turtle.Turtle()
+    trail.speed(0)
+    trail.hideturtle()
+    trail.goto(-685,-250)
+    trail.color("white")
+    trail.left(math.degrees(balls[0].angle))
+    trail.forward(350)
+    trail.penup()
+    
     pen.goto(-700, -250)
     pen.penup()
     for _t in t:
@@ -178,11 +187,16 @@ def launch_all(t, balls, pen, window):
         pen.clear()
         for j in range(0, 8, 1):
             pen.penup()
+            trail.fillcolor(balls[j].color)
             pen.fillcolor(balls[j].color)
             pen.begin_fill()
+            trail.begin_fill()
             pen.circle(RADIUS)
+            trail.circle(1)
             pen.end_fill()
+            trail.end_fill()
             pen.goto(balls[j].get_xcor(_t)*SCALE-680, balls[j].get_ycor(_t)*SCALE-250)
+            trail.goto(balls[j].get_xcor(_t)*SCALE-680, balls[j].get_ycor(_t)*SCALE-250+RADIUS)
         window.update()
 def draw_launch(window):
     ln = turtle.Turtle()
@@ -191,6 +205,9 @@ def draw_launch(window):
     ln.goto(0, 300)
     ln.color("white")
     ln.write("Hit 'Space' to LAUNCH", align="center", font=FONT)
+    ln.penup()
+    ln.goto(0, 270)
+    ln.write("and be patient till the balls hit the floor", align="center", font=('Arial', 10, 'bold'))
     window.update()
 def main():
     inputs = take_inputs()
