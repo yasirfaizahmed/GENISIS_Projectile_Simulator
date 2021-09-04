@@ -4,9 +4,9 @@
 
 ### Workflows 
 
-|Pytest|
-|------|
-|[![Pytest-main](https://github.com/yasirfaizahmed/GENISIS_Projectile_Simulator/actions/workflows/pytest.yml/badge.svg)](https://github.com/yasirfaizahmed/GENISIS_Projectile_Simulator/actions/workflows/pytest.yml)|
+|Pytest| Code coverage|
+|------|--------------|
+|[![Pytest-main](https://github.com/yasirfaizahmed/GENISIS_Projectile_Simulator/actions/workflows/pytest.yml/badge.svg)](https://github.com/yasirfaizahmed/GENISIS_Projectile_Simulator/actions/workflows/pytest.yml)| [![Code Coverage](https://github.com/yasirfaizahmed/GENISIS_Projectile_Simulator/actions/workflows/code_cov.yml/badge.svg)](https://github.com/yasirfaizahmed/GENISIS_Projectile_Simulator/actions/workflows/code_cov.yml)|
 
 ## Pre requisites 
 1. Please install `PythonTrutle` version 0.3.2
