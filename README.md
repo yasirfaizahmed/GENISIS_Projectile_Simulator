@@ -14,7 +14,7 @@
       `pip install turtle`
 
 ## Demo
-![](https://github.com/yasirfaizahmed/GENISIS_Projectile_Simulator/blob/master/Images/all.PNG)
+![](https://github.com/yasirfaizahmed/GENISIS_Projectile_Simulator/blob/master/Images/final.PNG)
 
 ## File structure
 
