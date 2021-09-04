@@ -33,6 +33,16 @@ gs = {
     7: 10.5,
     8: 13.3
     }
+planets = {
+    1: "Mercury",
+    2: "Venus",
+    3: "Earth",
+    4: "Mars",
+    5: "Jupyter",
+    6: "Saturn",
+    7: "Uranus",
+    8: "Neptune"
+}
 class Projectile_Object:
     velocity_0 = 0
     xcor = 0
@@ -41,15 +51,16 @@ class Projectile_Object:
     g = 0
     color = "red"
     planet = 0
-    def __init__(self, velocity_0, angle, planet):
+    FLAG = False
+    def __init__(self, velocity_0, angle, planet, FLAG = False):
         self.velocity_0 = velocity_0
         self.angle = math.radians(angle)
-        self.planet = planet+1
+        if FLAG == True:
+            self.planet = planet+1
+        elif FLAG == False:
+            self.planet = planet
+        self.color = colors[self.planet]
         self.g = gs[self.planet]
-        if self.planet != 9:
-            self.color = colors[self.planet]
-        
-        
     def get_xcor(self, t):
         self.xcor = round(self.velocity_0*math.cos(self.angle)*t, ROUND)
         return self.xcor
@@ -105,6 +116,11 @@ def launch(t, ball, pen, window):
     trail.left(math.degrees(ball.angle))
     trail.forward(350)
     trail.penup()
+    #printing the planet name
+    trail.color("white")
+    trail.goto(-150, 100)
+    trail.write("Planet :"+str(planets[ball.planet]), font=FONT)
+    trail.penup()
     #going to the default positions
     trail.goto(-680,-250)
     pen.goto(-700, -250)
@@ -143,7 +159,7 @@ def launch(t, ball, pen, window):
     trail.penup()
     window.update()
     #printing some data
-    print("\n\t\tPlanet No.               :", ball.planet)
+    print("\n\t\tPlanet                 :", planets[ball.planet])
     print("\t\tg Value of the Planet    :", ball.g)
     print("\t\tMaximum height           :", ball.max_height())
     print("\t\tMaximum horizontal range :", ball.range())
@@ -163,9 +179,6 @@ def launch_all(t, balls, pen, window):
             pen.end_fill()
             pen.goto(balls[j].get_xcor(_t)*SCALE-680, balls[j].get_ycor(_t)*SCALE-250)
         window.update()
-    
-    
-    
 def draw_launch(window):
     ln = turtle.Turtle()
     ln.hideturtle()
@@ -179,11 +192,11 @@ def main():
     if inputs[2] == 9:
         balls = []
         for i in range(0, 8, 1):
-            balls.append(Projectile_Object(inputs[0], inputs[1], planet=i))
-        END = balls[2].get_flighttime()
+            balls.append(Projectile_Object(inputs[0], inputs[1], planet=i, FLAG=True))
+        END = balls[0].get_flighttime()
         time_list = list(float_range(0, END, DELTA_TIME))
     else:
-        ball = Projectile_Object(inputs[0], inputs[1], planet=inputs[2])
+        ball = Projectile_Object(inputs[0], inputs[1], planet=inputs[2], FLAG=False)
         END = ball.get_flighttime()
         time_list = list(float_range(0, END, DELTA_TIME))
     #setting up the pen turtle
