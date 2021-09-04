@@ -5,7 +5,7 @@
 ## Pre requisites 
 1. Please install `PythonTrutle` version 0.3.2
 
-      `pip install PythonTurtle`
+      `pip install turtle`
 
 ## File structure
 
