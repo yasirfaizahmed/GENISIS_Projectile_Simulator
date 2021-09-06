@@ -1,4 +1,4 @@
-name: Pytest-2048 
+name: Pytest 
 
 on: [push]
 
